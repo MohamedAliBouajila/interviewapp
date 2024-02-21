@@ -6,7 +6,7 @@ import '../../models/person.dart';
 import '../../services/api_services.dart';
 import '../../utils/colors.dart';
 import '../widgets/person_card.dart';
-import 'detailsscreen.dart';
+import 'person_details_screen.dart';
 
 class PersonScreen extends StatefulWidget {
   const PersonScreen({Key? key}) : super(key: key);
@@ -27,6 +27,12 @@ class _PersonScreenState extends State<PersonScreen> {
           iconTheme: const IconThemeData(
             size: 19,
             color: AppColors.primaryColor,
+          ),
+          leading: IconButton(
+            icon:const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushNamed("/");
+            },
           ),
           shape:const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(

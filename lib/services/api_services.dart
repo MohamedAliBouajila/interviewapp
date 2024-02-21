@@ -10,10 +10,10 @@ class ApiServices {
   final String baseUrl = "http://63.250.52.98:9305";
   final String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImF1dGgiOlt7ImF1dGhvcml0eSI6IlJPTEVfQ0xJRU5UIn1dLCJpYXQiOjE3MDg0Mzc4MzUsImV4cCI6MTcwOTAzNzgzNX0.IFzC2a74BV2MvgTXDRISr8GJxwMbBIGzp3EzpCLFRU4";
   Future<List<Person>> fetchEmployes() async {
-    final reponse = await http.get(Uri.parse('$baseUrl/persons'));
+    final response = await http.get(Uri.parse('$baseUrl/persons'));
 
-    if (reponse.statusCode == 200) {
-      final List<dynamic> data = json.decode(reponse.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
       final List<Person> employees =
           data.map((person) => Person.fromJson(person)).toList();
       return employees;
@@ -23,16 +23,15 @@ class ApiServices {
   }
 
   Future fetchEmployeWithId(String id) async {
-    final reponse = await http.get(Uri.parse('$baseUrl/persons/$id'));
-    if (reponse.statusCode == 200) {
-      return json.decode(reponse.body);
+    final response = await http.get(Uri.parse('$baseUrl/persons/$id'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
     } else {
       throw Exception("failed to load");
     }
   }
 
   Future createEmploye(Person person) async {
-
   final List<Person> employees = await fetchEmployes();
   int? lastId = 0;
   if (employees.isNotEmpty) {
@@ -45,32 +44,41 @@ class ApiServices {
   final response = await http.post(
     Uri.parse('$baseUrl/persons/new'),
     body: personson,
-    headers: {HttpHeaders.contentTypeHeader: 'application/json',
+    headers: <String, String>{HttpHeaders.contentTypeHeader: 'application/json',
      HttpHeaders.authorizationHeader: 'Bearer $token'},
   );
 
-  print(response.body);
+  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
 
   if (response.statusCode == 201) {
-    return json.decode(response.body);
+    return true;
   } else {
     throw Exception("Failed to create employee");
   }
 }
 
 
-  Future updateEmploye(Person person) async {
-
-
+Future updateEmploye(Person person) async {
  final String projectJson = jsonEncode(person.toJson());
-    final reponse = await http.put(
+    final response = await http.put(
         Uri.parse('$baseUrl/persons/upuserr/${person.idperson}'),
         body: projectJson,
-        headers: {
+        headers: <String, String>{
           HttpHeaders.contentTypeHeader: 'application/json',
          HttpHeaders.authorizationHeader: 'Bearer $token'});
-    if (reponse.statusCode == 200) {
-      return json.decode(reponse.body);
+  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception("failed to load");
+    }
+  }
+
+  Future deleteEmploye(String id) async {
+    final response = await http.delete(
+        Uri.parse('$baseUrl/persons/$id'),);
+    if (response.statusCode == 204) {
+      return true;
     } else {
       throw Exception("failed to load");
     }
@@ -96,22 +104,19 @@ class ApiServices {
   if (projects.isNotEmpty) {
     lastId = projects.map((project) => project.idpro).reduce((a, b) => a > b ? a : b);
   }
-  
   project.idpro = lastId + 1;
   final String projectJson = jsonEncode(project.toJson());
-      print('Token : ${token}');
-  print(projectJson);
 
   final response = await http.post(Uri.parse('$baseUrl/projects/new'),
       body: projectJson, 
-      headers: {
+      headers: <String, String>{
         HttpHeaders.contentTypeHeader:'application/json',    
-          HttpHeaders.authorizationHeader: '$token'
+          HttpHeaders.authorizationHeader: 'Bearer $token'
       }
   );
-  
-  print(response.statusCode);
-  
+
+  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
+
   if (response.statusCode == 201) {
     return;
   } else {
@@ -119,7 +124,6 @@ class ApiServices {
   }
 }
 
-  
 Future<List<ProjectPerson>> fetchProjectPersons() async {
   final response = await http.get(Uri.parse('$baseUrl/projectsdone/all'));
 
@@ -133,8 +137,6 @@ Future<List<ProjectPerson>> fetchProjectPersons() async {
 
 Future<ProjectPerson> createProjectPerson(ProjectPerson projectPerson) async {
 
-  print(projectPerson.toJson());
-
   final response = await http.post(
     Uri.parse('$baseUrl/projectsdone/create'),
     headers: <String, String>{
@@ -143,6 +145,8 @@ Future<ProjectPerson> createProjectPerson(ProjectPerson projectPerson) async {
     },
     body: jsonEncode(projectPerson.toJson()),
   );
+
+    print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
 
   if (response.statusCode == 200) {
     return ProjectPerson.fromJson(json.decode(response.body));

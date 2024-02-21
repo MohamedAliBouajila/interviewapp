@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:interviewapp/ui/screens/homescreen.dart';
 import 'package:interviewapp/ui/screens/linkedproject.dart';
-import 'package:interviewapp/ui/screens/personscreen.dart';
+import 'package:interviewapp/ui/screens/persons_screen.dart';
 import 'package:interviewapp/ui/screens/projectsscreen.dart';
 
 void main() {

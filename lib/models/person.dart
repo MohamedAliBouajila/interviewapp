@@ -21,13 +21,13 @@ class Person {
 
   factory Person.fromJson(Map<String, dynamic>? json) {
     return Person(
-      idperson: json?['idperson']  ?? "",
-      nom: json?['nom']  ?? "",
-      prenom: json?['prenom'] ?? "",
-      mail: json?['mail'] ?? "",
-      password: json?['password'] ?? "",
-      username: json?['username'] ?? "",
-      status: json?['status'] ?? "",
+      idperson: json?['idperson'],
+      nom: json?['nom'],
+      prenom: json?['prenom'],
+      mail: json?['mail'],
+      password: json?['password'],
+      username: json?['username'],
+      status: json?['status'],
       roles: List<String>.from(json?['roles'] ?? []),
     );
   }
@@ -35,13 +35,14 @@ class Person {
   Map<String, dynamic> toJson() {
     return {
       'idperson': idperson,
-      'nom': nom,
+      'nom': nom ,
       'prenom': prenom,
       'mail': mail,
       'password': password,
       'username': username,
       'status': status,
       'roles': roles,
+      'hibernateLazyInitializer': {}
     };
   }
 }

@@ -34,8 +34,9 @@ class Project {
       "nom": nom,
       "date":date,
       "description": description,
-      "latitude": latitude,
-      "longitude": longitude,
+      "latitude": latitude.toString(),
+      "longitude": longitude.toString(),
+      "hibernateLazyInitializer": {}
     };
   }
 }

@@ -28,18 +28,24 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
             size: 19,
             color: AppColors.primaryColor,
           ),
-          shape: RoundedRectangleBorder(
+           leading: IconButton(
+            icon:const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushNamed("/");
+            },
+          ),
+          shape:const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(20.0),
             ),
           ),
-          title: Text(
+          title:const Text(
             "Projects",
             style: TextStyle(fontSize: 14, color: AppColors.greyColor),
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          padding:const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           child: FutureBuilder<List<Project>>(
             future: apiService.fetchProjects(),
             builder: (context, snapshot) {

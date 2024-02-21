@@ -29,6 +29,12 @@ class _LinkedProjectsPageState extends State<LinkedProjectsPage> {
             size: 19,
             color: AppColors.primaryColor,
           ),
+           leading: IconButton(
+            icon:const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushNamed("/");
+            },
+          ),
           shape:const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(20.0),

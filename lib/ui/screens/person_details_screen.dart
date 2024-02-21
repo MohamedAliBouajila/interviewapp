@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:interviewapp/services/api_services.dart';
+import 'package:interviewapp/ui/screens/persons_screen.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
@@ -7,14 +8,23 @@ import '../../models/person.dart';
 import '../../utils/colors.dart';
 import '../widgets/custom_dashed_line.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final Person person;
   const DetailsScreen({Key? key, required this.person}) : super(key: key);
 
-  Widget build(BuildContext context) {
-    final String role =
-        person.roles.toString().replaceAll('[', '').replaceAll(']', '');
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
 
+class _DetailsScreenState extends State<DetailsScreen> {
+ final ApiServices apiService = ApiServices();
+
+ 
+  @override
+  Widget build(BuildContext context) {
+       final String role =
+        widget.person.roles.toString().replaceAll('[', '').replaceAll(']', '');
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -30,7 +40,7 @@ class DetailsScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          person.username!,
+          widget.person.username!,
           style:const TextStyle(fontSize: 14, color: AppColors.greyColor),
         ),
       ),
@@ -76,7 +86,7 @@ class DetailsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              person.username!,
+                              widget.person.username!,
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
@@ -93,15 +103,15 @@ class DetailsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 _textDescription("Full name",
-                                    "${person.nom} ${person.prenom}"),
-                                _textDescription("ID", "${person.idperson}"),
+                                    "${widget.person.nom} ${widget.person.prenom}"),
+                                _textDescription("ID", "${widget.person.idperson}"),
                               ],
                             ),
                             const SizedBox(height: 12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _textDescription("Email", "${person.mail}"),
+                                _textDescription("Email", "${widget.person.mail}"),
                               ],
                             ),
                             const SizedBox(height: 32),
@@ -119,16 +129,8 @@ class DetailsScreen extends StatelessWidget {
                                 _textDescription("Role", "$role"),
                               ],
                             ),
-                            // Align(
-                            //   alignment: Alignment.center,
-                            //   child: Image.asset(
-                            //     "assets/images/barcode.png",
-                            //     height: 70,
-                            //     width: MediaQuery.of(context).size.width * 0.5,
-                            //     fit: BoxFit.fill,
-                            //   ),
-                            // ),
-                            const SizedBox(height: 14),
+                        
+                     
                           ],
                         ),
                       ),
@@ -149,7 +151,7 @@ class DetailsScreen extends StatelessWidget {
          showDialog(
               context: context,
               builder: (BuildContext context) {
-                return EditUserDialog(person: person,); // Custom dialog widget
+                return EditUserDialog(person: widget.person,); 
               },
             );
       },
@@ -163,16 +165,36 @@ class DetailsScreen extends StatelessWidget {
     const SizedBox(height: 5,),
     FloatingActionButton(
       onPressed: () {
+       
+  QuickAlert.show(
+   context: context,
+   type: QuickAlertType.warning,
+   text: 'Do you want delete this person?',
+   showCancelBtn:true,
+  confirmBtnText: 'Yes',
+   cancelBtnText: 'No',
+   confirmBtnColor: const Color.fromARGB(255, 175, 76, 76),
+   onConfirmBtnTap: ()  async{
+                   await apiService.deleteEmploye(widget.person.idperson.toString()).then((value) => {
+                    if(value == true){
+                   QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      text: 'Deleted Successfully!',
+                      onConfirmBtnTap: () {
+                        Navigator.of(context).pushNamed("/persons");
+                      },
+                      )
+                    }
+                   });
 
-QuickAlert.show(
- context: context,
- type: QuickAlertType.warning,
- text: 'Do you want delete this person?',
- showCancelBtn:true,
-confirmBtnText: 'Yes',
- cancelBtnText: 'No',
- confirmBtnColor: const Color.fromARGB(255, 175, 76, 76),
-);
+
+                   
+                        },
+  );
+
+
+
       },
  
       backgroundColor: Colors.red, 
@@ -387,17 +409,21 @@ class EditUserDialog extends StatelessWidget {
 
 
                     try {
-                      await apiService.updateEmploye(updatePerson);
-                      QuickAlert.show(
+                      await apiService.updateEmploye(updatePerson).then((value) => {
+                    if(value == true){
+                       QuickAlert.show(
                       context: context,
                       type: QuickAlertType.success,
                       text: 'Update Completed Successfully!',
                       onConfirmBtnTap: () {
                         Navigator.of(context)..pushNamed("/persons");
                       },
-                      );
+                      )
+                     
+                    }
+                   });
 
-
+                     
    
                     } catch (error) {
 
