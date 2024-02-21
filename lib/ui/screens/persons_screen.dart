@@ -20,82 +20,86 @@ class _PersonScreenState extends State<PersonScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: const IconThemeData(
-            size: 19,
-            color: AppColors.primaryColor,
-          ),
-          leading: IconButton(
-            icon:const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pushNamed("/");
-            },
-          ),
-          shape:const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20.0),
-            ),
-          ),
-          title:const Text(
-            "Persons",
-            style: TextStyle(fontSize: 14, color: AppColors.greyColor),
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          size: 19,
+          color: AppColors.primaryColor,
         ),
-        body: Container(
-          padding:const EdgeInsets.symmetric( horizontal: 15),
-          child: FutureBuilder<List<Person>>(
-            future: apiService.fetchEmployes(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No data available'));
-              } else {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    Person person = snapshot.data![index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailsScreen(
-                              person: person,
-                            ),
-                          ),
-                        );
-                      },
-                      child: CardOfUsers(
-                        person: person,
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AddUserDialog(); 
-              },
-            );
+            Navigator.of(context).pushNamed("/");
           },
-        backgroundColor: Color.fromARGB(255, 199, 138, 47),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), 
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20.0),
+          ),
+        ),
+        title: const Text(
+          "Persons",
+          style: TextStyle(fontSize: 14, color: AppColors.greyColor),
+        ),
       ),
-       child: const Icon(Icons.add,color: Color.fromARGB(195, 255, 255, 255),),
-    ),);
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: FutureBuilder<List<Person>>(
+          future: apiService.fetchEmployes(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No data available'));
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  Person person = snapshot.data![index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            person: person,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CardOfUsers(
+                      person: person,
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AddUserDialog();
+            },
+          );
+        },
+        backgroundColor: Color.fromARGB(255, 199, 138, 47),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: const Icon(
+          Icons.add,
+          color: Color.fromARGB(195, 255, 255, 255),
+        ),
+      ),
+    );
   }
 }
 
@@ -103,7 +107,7 @@ class AddUserDialog extends StatelessWidget {
   final TextEditingController nomController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController prenomController = TextEditingController();
-   final TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
   final TextEditingController rolesController = TextEditingController();
@@ -145,7 +149,7 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-               SizedBox(height: 16.0),
+              SizedBox(height: 16.0),
               TextField(
                 controller: prenomController,
                 decoration: const InputDecoration(
@@ -166,9 +170,9 @@ class AddUserDialog extends StatelessWidget {
               const SizedBox(height: 16.0),
               TextField(
                 controller: usernameController,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
-                 labelStyle:
+                  labelStyle:
                       TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -181,10 +185,10 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-             const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextField(
                 controller: emailController,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
@@ -199,10 +203,10 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-                const SizedBox(height: 16.0),
-                 TextField(
+              const SizedBox(height: 16.0),
+              TextField(
                 controller: rolesController,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Roles',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
@@ -217,10 +221,10 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-             const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextField(
                 controller: statusController,
-                decoration:const InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Status',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
@@ -235,11 +239,11 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-             const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextField(
                 controller: passwordController,
-                obscureText:true,
-                decoration:const InputDecoration(
+                obscureText: true,
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(255, 109, 109, 109)),
@@ -254,14 +258,12 @@ class AddUserDialog extends StatelessWidget {
                 ),
                 style: TextStyle(color: Colors.black),
               ),
-           
-              
               const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    style:const ButtonStyle(
+                    style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             const Color.fromARGB(61, 255, 255, 255))),
                     onPressed: () {
@@ -278,42 +280,67 @@ class AddUserDialog extends StatelessWidget {
                       String prenom = prenomController.text;
                       String username = usernameController.text;
                       String email = emailController.text;
-                      String password= passwordController.text;
+                      String password = passwordController.text;
                       String status = statusController.text;
-                      List<String> roles  = rolesController.text.split(",");
-        
-                      if(roles.isEmpty){
-                       roles =  [rolesController.text];
+                      List<String> roles = rolesController.text.split(",");
+
+                      if (roles.isEmpty) {
+                        roles = [rolesController.text];
                       }
-        
-                      if (nom.isEmpty || username.isEmpty || email.isEmpty ||
-                      prenom.isEmpty || password.isEmpty
-                      ) {
-                        return  QuickAlert.show(
-         context: context,
-         type: QuickAlertType.info,
-         title: 'Oops...',
-         text: 'You should fill all the inputs',
-        );
+
+                       final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+                      if(!emailRegex.hasMatch(email)){
+                         return QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.info,
+                          title: 'Yoo...',
+                          text: 'Verify Email',
+                        );
                       }
-        
-             
+                      if (nom.isEmpty ||
+                          username.isEmpty ||
+                          email.isEmpty ||
+                          prenom.isEmpty ||
+                          password.isEmpty) {
+                        return QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.info,
+                          title: 'Oops...',
+                          text: 'You should fill all the inputs',
+                        );
+                      }
+
                       Person newPerson = Person(
-                        idperson: 0,
-                        nom: nom,
-                        prenom: prenom,
-                        username:username,
-                        mail: email,
-                        password: password,
-                        status: status,
-                        roles: roles
-                      );
-        
+                          idperson: 0,
+                          nom: nom,
+                          prenom: prenom,
+                          username: username,
+                          mail: email,
+                          password: password,
+                          status: status,
+                          roles: roles);
+
                       try {
-                        await apiService.createEmploye(newPerson);
-                      } catch (error) {
-        
-                        print('Error adding user: $error');
+                        await apiService.createEmploye(newPerson).then((value) {
+                          if (value == true) {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.success,
+                                text: 'Add Successfully!',
+                                onConfirmBtnTap: () {
+                                  Navigator.of(context).pushNamed("/persons");
+                                });
+                          }
+                        });
+                      } catch (error) {              
+                         QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.success,
+                                text: error.toString(),
+                                onConfirmBtnTap: () {
+                                  Navigator.of(context).pushNamed("/persons");
+                                });
                       }
                     },
                     child: Text('Add'),

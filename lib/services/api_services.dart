@@ -48,12 +48,12 @@ class ApiServices {
      HttpHeaders.authorizationHeader: 'Bearer $token'},
   );
 
-  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
+ 
 
   if (response.statusCode == 201) {
     return true;
   } else {
-    throw Exception("Failed to create employee");
+    throw Exception("Expired or invalid JWT token");
   }
 }
 
@@ -66,7 +66,7 @@ Future updateEmploye(Person person) async {
         headers: <String, String>{
           HttpHeaders.contentTypeHeader: 'application/json',
          HttpHeaders.authorizationHeader: 'Bearer $token'});
-  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
+ 
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -115,8 +115,6 @@ Future updateEmploye(Person person) async {
       }
   );
 
-  print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
-
   if (response.statusCode == 201) {
     return;
   } else {
@@ -145,9 +143,6 @@ Future<ProjectPerson> createProjectPerson(ProjectPerson projectPerson) async {
     },
     body: jsonEncode(projectPerson.toJson()),
   );
-
-    print(response.statusCode == 500 ? "Expired or invalid JWT token" : "");
-
   if (response.statusCode == 200) {
     return ProjectPerson.fromJson(json.decode(response.body));
   } else {
